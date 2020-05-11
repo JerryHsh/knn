@@ -2,6 +2,7 @@ import numpy as np
 import operator as op
 import matplotlib.pyplot as plt
 from minst import *
+from os import system
 
 def autonorm(dataset,flag):#if flag =1 return binumerical dataset else return normal norm dataset
     norm_dataset=dataset.copy()
@@ -38,10 +39,14 @@ def class_handwrite_by_knn(k,flag=0):
     #answer labels
     answer_labels=np.empty(test_labels.shape,dtype=type(test_labels[0]))
     #get answer by knn
-    for i in range(10):
+    for i in range(test_labels.shape[0]):
+        if (i+1)%100==0:
+            system("clear")
+            print("knn got "+str(i+1)+" labels")
         answer_labels[i]=knn_classifier(test_images_dataset[i],train_images_dataset,train_labels,k)
-        print("knn give:"+str(answer_labels[i])+"true labels"+str(test_labels[i]))
-    #print(accuracy_rate_cal(answer_labels,test_labels))
+        #print("knn give:"+str(answer_labels[i])+"true labels"+str(test_labels[i]))
+    print(accuracy_rate_cal(answer_labels,test_labels))
+    
 
 
 def flatten_set(dataset):
@@ -67,9 +72,6 @@ def knn_classifier(exp,dataset,labels,k):
         class_count[current_label]=class_count.get(current_label,0)+1
     rec_list=sorted(class_count.items(),key=op.itemgetter(1),reverse=True)
     return rec_list[0][0]
-
-
-
 
 def accuracy_rate_cal(label_true,label_get):
     """return the accuracy rate in knn"""
